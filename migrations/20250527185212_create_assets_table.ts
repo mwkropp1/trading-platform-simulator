@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable('assets', (table) => {
+  await knex.schema.createTable('assets', table => {
     table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'));
     table.string('symbol').notNullable().unique();
     table.string('name').notNullable();
