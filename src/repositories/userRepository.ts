@@ -20,7 +20,7 @@ export async function getUserById(id: string): Promise<User | null> {
     const user = await db<User>('users').where({ id }).first();
     return user ?? null;
   } catch (error) {
-    console.error('Database error fetching user:', error);
+    console.error('Database error fetching user: ', error);
     throw error;
   }
 }
@@ -43,7 +43,7 @@ export async function insertUser(user: User): Promise<User> {
       throw new Error('Username or email already exists');
     }
 
-    console.error('Database error inserting user:', error);
+    console.error('Database error inserting user: ', error);
     throw error;
   }
 }
