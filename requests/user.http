@@ -1,0 +1,19 @@
+### Create new user
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+    "username": "dcs",
+    "email": "tester3@example.com",
+    "password_hash": "hashed_password",
+    "role": "admin",
+    "cash_balance": 1000451  
+}
+
+### Get user by ID
+GET http://localhost:3000/api/v1/users/68547ebd-baaf-4054-b04e-fee9507b11bd
+Content-Type: application/json
+
+### Check Health
+GET http://localhost:3000/health
+Content-Type: application/json
