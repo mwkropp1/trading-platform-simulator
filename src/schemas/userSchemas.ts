@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const CreateUserSchema = z.object({
-  username: z.string().min(2).max(50),
+  username: z.string().min(3).max(30),
   email: z.string().email(),
-  password_hash: z.string().min(1),
+  password_hash: z.string().length(60, 'Invalid password hash format'),
   role: z.enum(['user', 'admin']).default('user'),
   cash_balance: z
     .union([

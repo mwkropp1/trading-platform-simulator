@@ -12,7 +12,7 @@ export interface User {
 }
 
 export async function getUserById(id: string): Promise<User | null> {
-  if (!id || typeof id !== 'string') {
+  if (!id.trim()) {
     return null;
   }
 
@@ -20,7 +20,21 @@ export async function getUserById(id: string): Promise<User | null> {
     const user = await db<User>('users').where({ id }).first();
     return user ?? null;
   } catch (error) {
-    console.error('Database error fetching user: ', error);
+    console.error('Database error fetching user by id: ', error);
+    throw error;
+  }
+}
+
+export async function getUserByEmail(email: string): Promise<User | null> {
+  if (!email?.trim()) {
+    return null;
+  }
+
+  try {
+    const user = await db<User>('users').where({ email: email.toLowerCase() }).first();
+    return user ?? null;
+  } catch (error) {
+    console.error('Database error fetching user by email: ', error);
     throw error;
   }
 }
@@ -35,7 +49,12 @@ export async function insertUser(user: User): Promise<User> {
   }
 
   try {
-    const [insertedUser] = await db<User>('users').insert(user).returning('*');
+    const normalizedUser = {
+      ...user,
+      email: user.email.toLowerCase(),
+    };
+
+    const [insertedUser] = await db<User>('users').insert(normalizedUser).returning('*');
 
     return insertedUser;
   } catch (error: any) {
