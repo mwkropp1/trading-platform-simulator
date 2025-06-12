@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { userRouter } from './routes/userRoutes';
 import { authRouter } from './routes/authRoutes';
+import { assetRouter } from './routes/assetRoutes';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/assets', assetRouter);
 
 app.get('/health', (req: Request, res: Response): void => {
   res.status(200).send('OK');
