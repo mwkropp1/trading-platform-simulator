@@ -1,0 +1,38 @@
+@authToken = your_auth_token_here
+@adminToken = your_admin_token_here
+
+### Get all assets
+GET http://localhost:3000/api/v1/assets
+Authorization: Bearer {{authToken}}
+
+### Get asset by ID
+GET http://localhost:3000/api/v1/assets/1234
+Authorization: Bearer {{authToken}}
+
+### Get asset by symbol
+GET http://localhost:3000/api/v1/assets/symbol/AAPL
+Authorization: Bearer {{authToken}}
+
+### Create new asset (admin only)
+POST http://localhost:3000/api/v1/assets
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "name": "Apple Inc.",
+  "type": "stock",
+  "exchange": "NASDAQ"
+}
+
+### Create new crypto asset (admin only)
+POST http://localhost:3000/api/v1/assets
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "symbol": "BTC",
+  "name": "Bitcoin",
+  "type": "crypto",
+  "exchange": "COINCAP"
+}

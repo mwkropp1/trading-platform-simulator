@@ -1,15 +1,19 @@
+@baseUrl = http://localhost:3000
+
 ### Register new user
-POST http://localhost:3000/api/v1/auth/register
+POST {{baseUrl}}/api/v1/auth/register
 Content-Type: application/json
 
 {
-    "username": "testuser",
-    "email": "test@example.com",
-    "password": "Password123"
+    "username": "adminuser",
+    "email": "admin@example.com",
+    "password": "Password123",
+    "role": "admin"
 }
 
 ### Login user
-POST http://localhost:3000/api/v1/auth/login
+# @name loginUser
+POST {{baseUrl}}/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -17,10 +21,20 @@ Content-Type: application/json
     "password": "Password123"
 }
 
-### Get current user (me)
-GET http://localhost:3000/api/v1/auth/me
-Authorization: Bearer {{authToken}}
+### Login as admin
+# @name loginAdmin
+POST {{baseUrl}}/api/v1/auth/login
 Content-Type: application/json
 
-### Variables
-@authToken = eyJhbGciOiJIUzI1NiI... # Example token, replace
+{
+    "email": "admin@example.com",
+    "password": "Password123"
+}
+
+@authToken = {{loginUser.response.body.token}}
+@adminToken = {{loginAdmin.response.body.token}}
+
+### Get current user (me)
+GET {{baseUrl}}/api/v1/auth/me
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
