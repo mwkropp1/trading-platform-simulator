@@ -2,7 +2,7 @@ import NodeCache from 'node-cache';
 import { PriceService } from './priceService';
 import { AssetType, MarketData } from '../types/asset';
 
-const cache = new NodeCache({ stdTTL: 300 }); // 5 minute TTL
+const cache = new NodeCache({ stdTTL: 300 });
 
 export async function getCachedPrice(symbol: string, type: AssetType): Promise<MarketData> {
   const cacheKey = `price:${type}:${symbol}`;

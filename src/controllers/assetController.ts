@@ -11,7 +11,7 @@ import { getCachedPrice } from '../utils/priceCache';
 import { DBAsset, MarketData, AssetResponse } from '../types/asset';
 
 export class AssetController {
-  static getAll = async (_req: Request, res: Response): Promise<void> => {
+  static getAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const assets = await getAllAssets();
       const safeAssets = assets.map(asset => AssetResponseSchema.parse(asset));
@@ -50,9 +50,7 @@ export class AssetController {
       const response: AssetResponse = {
         ...asset,
         current_price: marketData.price,
-        price_change_24h: marketData.change24h,
-        volume_24h: marketData.volume24h,
-        price_updated_at: marketData.lastUpdated,
+        price_change: marketData.priceChange,
       };
 
       res.json(response);

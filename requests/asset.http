@@ -1,16 +1,17 @@
-@authToken = your_auth_token_here
-@adminToken = your_admin_token_here
+@baseUrl = http://localhost:3000
+@authToken = get from auth.http
+@adminToken = get from auth.http
 
 ### Get all assets
-GET http://localhost:3000/api/v1/assets
+GET {{baseUrl}}/api/v1/assets
 Authorization: Bearer {{authToken}}
 
 ### Get asset by ID
-GET http://localhost:3000/api/v1/assets/1234
+GET http://localhost:3000/api/v1/assets/{assetId}
 Authorization: Bearer {{authToken}}
 
 ### Get asset by symbol
-GET http://localhost:3000/api/v1/assets/symbol/AAPL
+GET http://localhost:3000/api/v1/assets/symbol/BTC
 Authorization: Bearer {{authToken}}
 
 ### Create new asset (admin only)
@@ -31,8 +32,20 @@ Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
+  "symbol": "AAPL",
+  "name": "APPLE",
+  "type": "stock",
+  "exchange": "iex"
+}
+
+### Create new crypto asset (admin only)
+POST http://localhost:3000/api/v1/assets
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
   "symbol": "BTC",
   "name": "Bitcoin",
   "type": "crypto",
-  "exchange": "COINCAP"
+  "exchange": "coincap"
 }

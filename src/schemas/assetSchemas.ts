@@ -20,11 +20,17 @@ export const DBAssetSchema = CreateAssetSchema.extend({
   updated_at: z.date(),
 });
 
-export const AssetResponseSchema = DBAssetSchema.extend({
-  current_price: z.number().positive(),
-  price_change_24h: z.number(),
-  volume_24h: z.number().positive(),
-}).omit({ price_usd: true });
+export const AssetResponseSchema = z.object({
+  id: z.string().uuid(),
+  symbol: z.string(),
+  name: z.string(),
+  type: z.enum(['stock', 'crypto', 'etf', 'forex']),
+  exchange: z.string().nullable(),
+  price_usd: z.number().nullable(),
+  price_updated_at: z.date().nullable(),
+  created_at: z.date(),
+  updated_at: z.date(),
+});
 
 export type CreateAssetRequest = z.infer<typeof CreateAssetSchema>;
 export type AssetResponse = z.infer<typeof AssetResponseSchema>;

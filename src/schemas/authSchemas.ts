@@ -20,6 +20,9 @@ export const RegisterSchema = z.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
       'Password must contain at least one uppercase letter, one lowercase letter, and one number'
     ),
+  role: z.enum(['user', 'admin'], {
+    errorMap: () => ({ message: 'Role must be either "user" or "admin"' }),
+  }),
 });
 
 export const LoginSchema = z.object({

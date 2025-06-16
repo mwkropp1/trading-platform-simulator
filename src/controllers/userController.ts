@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { getUserById, insertUser } from '../repositories/userRepository';
 import { CreateUserSchema, UserParamsSchema, UserResponseSchema } from '../schemas/userSchemas';
 import { z } from 'zod';
@@ -26,25 +26,14 @@ export class UserController {
     }
   };
 
-  static createUser = async (req: Request, res: Response): Promise<void> => {
+  static createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const validatedData = CreateUserSchema.parse(req.body);
       const newUser = await insertUser(validatedData);
       const safeUser = UserResponseSchema.parse(newUser);
       res.status(201).json(safeUser);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ error: error.errors });
-        return;
-      }
-      if (error instanceof Error) {
-        if (error.message === 'Username or email already exists') {
-          res.status(409).json({ error: error.message });
-          return;
-        }
-      }
-      console.error('Error creating user: ', error);
-      res.status(500).json({ error: 'Internal server error' });
+      next(error);
     }
   };
 }

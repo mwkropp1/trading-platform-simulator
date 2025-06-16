@@ -7,6 +7,8 @@
   "scripts": {
     "start": "tsx src/server.ts",
     "dev": "tsx watch src/server.ts",
+    "debug": "tsx --inspect-brk src/server.ts",
+    "debug:watch": "tsx watch --inspect-brk src/server.ts",
     "test": "jest",
     "test:integration": "jest tests/integration",
     "test:watch": "jest --watch",

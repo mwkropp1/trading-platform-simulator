@@ -17,13 +17,11 @@ export interface DBAsset extends CreateAsset {
 
 export interface MarketData {
   price: number;
-  change24h: number;
-  volume24h: number;
+  priceChange: number;
   lastUpdated: Date;
 }
 
 export interface AssetResponse extends Omit<DBAsset, 'price_usd'> {
   current_price: number;
-  price_change_24h: number;
-  volume_24h: number;
+  price_change: number;
 }

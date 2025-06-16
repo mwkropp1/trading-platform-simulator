@@ -1,3 +1,4 @@
+import { DatabaseError, ValidationError } from '../errors';
 import db from '../db';
 
 export interface User {
@@ -13,39 +14,44 @@ export interface User {
 
 export async function getUserById(id: string): Promise<User | null> {
   if (!id.trim()) {
-    return null;
+    throw ValidationError.field('Invalid user ID', 'id');
   }
 
   try {
     const user = await db<User>('users').where({ id }).first();
     return user ?? null;
   } catch (error) {
-    console.error('Database error fetching user by id: ', error);
-    throw error;
+    console.error('Database error fetching user by id:', error);
+    throw DatabaseError.queryFailed(error instanceof Error ? error : new Error('Unknown error'));
   }
 }
 
 export async function getUserByEmail(email: string): Promise<User | null> {
   if (!email?.trim()) {
-    return null;
+    throw ValidationError.field('Invalid email', 'email');
   }
 
   try {
     const user = await db<User>('users').where({ email: email.toLowerCase() }).first();
     return user ?? null;
   } catch (error) {
-    console.error('Database error fetching user by email: ', error);
-    throw error;
+    console.error('Database error fetching user by email:', error);
+    throw DatabaseError.queryFailed(error instanceof Error ? error : new Error('Unknown error'));
   }
 }
 
 export async function insertUser(user: User): Promise<User> {
-  if (!user.username?.trim() || !user.email?.trim()) {
-    throw new Error('Username and email are required');
+  // Validation checks
+  if (!user.username?.trim()) {
+    throw ValidationError.field('Username is required', 'username');
+  }
+
+  if (!user.email?.trim()) {
+    throw ValidationError.field('Email is required', 'email');
   }
 
   if (!['user', 'admin'].includes(user.role)) {
-    throw new Error('Invalid role');
+    throw ValidationError.field('Invalid role value', 'role');
   }
 
   try {
@@ -57,12 +63,15 @@ export async function insertUser(user: User): Promise<User> {
     const [insertedUser] = await db<User>('users').insert(normalizedUser).returning('*');
 
     return insertedUser;
-  } catch (error: any) {
-    if (error.code === '23505') {
-      throw new Error('Username or email already exists');
+  } catch (error) {
+    // Handle unique constraint violations
+    if (error instanceof Error && error.message.includes('duplicate key')) {
+      const field = error.message.includes('email') ? 'email' : 'username';
+      throw DatabaseError.duplicate(field);
     }
 
-    console.error('Database error inserting user: ', error);
-    throw error;
+    // Log and throw database errors
+    console.error('Database error inserting user:', error);
+    throw DatabaseError.queryFailed(error instanceof Error ? error : new Error('Unknown error'));
   }
 }

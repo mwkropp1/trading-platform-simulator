@@ -5,7 +5,7 @@ POST {{baseUrl}}/api/v1/auth/register
 Content-Type: application/json
 
 {
-    "username": "adminuser",
+    "username": "admin",
     "email": "admin@example.com",
     "password": "Password123",
     "role": "admin"
@@ -31,6 +31,7 @@ Content-Type: application/json
     "password": "Password123"
 }
 
+### Tokens
 @authToken = {{loginUser.response.body.token}}
 @adminToken = {{loginAdmin.response.body.token}}
 
