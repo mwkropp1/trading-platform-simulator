@@ -1,3 +1,4 @@
+import { DatabaseError, ValidationError } from '../errors';
 import db from '../db';
 
 export interface User {
@@ -40,12 +41,16 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 }
 
 export async function insertUser(user: User): Promise<User> {
-  if (!user.username?.trim() || !user.email?.trim()) {
-    throw new Error('Username and email are required');
+  if (!user.username?.trim()) {
+    throw new ValidationError('Username is required', 'username');
+  }
+
+  if (!user.email?.trim()) {
+    throw new ValidationError('Email is required', 'email');
   }
 
   if (!['user', 'admin'].includes(user.role)) {
-    throw new Error('Invalid role');
+    throw new ValidationError('Invalid role value', 'role');
   }
 
   try {
@@ -55,14 +60,13 @@ export async function insertUser(user: User): Promise<User> {
     };
 
     const [insertedUser] = await db<User>('users').insert(normalizedUser).returning('*');
-
     return insertedUser;
   } catch (error: any) {
     if (error.code === '23505') {
-      throw new Error('Username or email already exists');
+      const field = error.detail?.includes('email') ? 'email' : 'username';
+      throw new ValidationError(`${field} already exists`, field);
     }
 
-    console.error('Database error inserting user: ', error);
-    throw error;
+    throw new DatabaseError('Failed to insert user', error);
   }
 }
