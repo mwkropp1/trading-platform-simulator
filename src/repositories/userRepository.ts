@@ -41,7 +41,6 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 }
 
 export async function insertUser(user: User): Promise<User> {
-  // Validation checks
   if (!user.username?.trim()) {
     throw ValidationError.field('Username is required', 'username');
   }
@@ -64,13 +63,11 @@ export async function insertUser(user: User): Promise<User> {
 
     return insertedUser;
   } catch (error) {
-    // Handle unique constraint violations
     if (error instanceof Error && error.message.includes('duplicate key')) {
       const field = error.message.includes('email') ? 'email' : 'username';
       throw DatabaseError.duplicate(field);
     }
 
-    // Log and throw database errors
     console.error('Database error inserting user:', error);
     throw DatabaseError.queryFailed(error instanceof Error ? error : new Error('Unknown error'));
   }

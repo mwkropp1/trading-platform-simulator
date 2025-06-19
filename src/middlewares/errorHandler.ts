@@ -9,7 +9,6 @@ export function errorHandler(error: Error, req: Request, res: Response, next: Ne
     error: error instanceof Error ? error.message : 'Unknown error',
   });
 
-  // Handle Zod validation errors
   if (error instanceof ZodError) {
     const validationError = ValidationError.fromZod(error);
     res.status(validationError.statusCode).json({
@@ -20,7 +19,6 @@ export function errorHandler(error: Error, req: Request, res: Response, next: Ne
     return;
   }
 
-  // Handle all API errors (includes Auth, Validation, Database errors)
   if (error instanceof ApiError) {
     res.status(error.statusCode).json({
       code: error.code,
@@ -30,7 +28,6 @@ export function errorHandler(error: Error, req: Request, res: Response, next: Ne
     return;
   }
 
-  // Handle unexpected errors
   const internalError = ApiError.internal();
   res.status(internalError.statusCode).json({
     code: internalError.code,

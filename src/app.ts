@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import { userRouter } from './routes/userRoutes';
 import { authRouter } from './routes/authRoutes';
 import { assetRouter } from './routes/assetRoutes';
+import tradeRoutes from './routes/tradeRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(errorHandler);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/assets', assetRouter);
+app.use('/api/v1/trades', tradeRoutes);
 
 app.get('/health', (req: Request, res: Response): void => {
   res.status(200).send('OK');
