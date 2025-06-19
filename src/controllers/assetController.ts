@@ -5,16 +5,16 @@ import {
   getAssetBySymbol,
   insertAsset,
 } from '../repositories/assetRepository';
-import { CreateAssetSchema, AssetResponseSchema } from '../schemas/assetSchemas';
+import { createAssetSchema, assetSchema } from '../schemas/asset.schema';
 import { z } from 'zod';
 import { getCachedPrice } from '../utils/priceCache';
-import { DBAsset, MarketData, AssetResponse } from '../types/asset';
+import { Asset, AssetWithMarketData, MarketData } from '../types/asset';
 
 export class AssetController {
   static getAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const assets = await getAllAssets();
-      const safeAssets = assets.map(asset => AssetResponseSchema.parse(asset));
+      const safeAssets = assets.map(asset => assetSchema.parse(asset));
       res.json(safeAssets);
     } catch (error) {
       console.error('Error fetching assets:', error);
@@ -29,7 +29,7 @@ export class AssetController {
         res.status(404).json({ error: 'Asset not found' });
         return;
       }
-      const safeAsset = AssetResponseSchema.parse(asset);
+      const safeAsset = assetSchema.parse(asset);
       res.json(safeAsset);
     } catch (error) {
       console.error('Error fetching asset:', error);
@@ -45,12 +45,11 @@ export class AssetController {
         return;
       }
 
-      const marketData = await getCachedPrice(asset.symbol, asset.type);
+      const marketData = await getCachedPrice(asset);
 
-      const response: AssetResponse = {
+      const response: AssetWithMarketData = {
         ...asset,
-        current_price: marketData.price,
-        price_change: marketData.priceChange,
+        ...marketData,
       };
 
       res.json(response);
@@ -62,9 +61,9 @@ export class AssetController {
 
   static create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const data = CreateAssetSchema.parse(req.body);
+      const data = createAssetSchema.parse(req.body);
       const asset = await insertAsset(data);
-      const safeAsset = AssetResponseSchema.parse(asset);
+      const safeAsset = assetSchema.parse(asset);
       res.status(201).json(safeAsset);
     } catch (error) {
       if (error instanceof z.ZodError) {

@@ -8,21 +8,13 @@ export async function seed(knex: Knex): Promise<void> {
       symbol: 'BTC',
       name: 'Bitcoin',
       type: 'crypto',
-      source: 'coincap',
-      metadata: {
-        description: 'Digital gold',
-        website: 'https://bitcoin.org',
-      },
+      exchange: 'coinbase',
     },
     {
       symbol: 'ETH',
       name: 'Ethereum',
       type: 'crypto',
-      source: 'coincap',
-      metadata: {
-        description: 'Programmable blockchain',
-        website: 'https://ethereum.org',
-      },
+      exchange: 'coinbase',
     },
   ];
 
@@ -31,21 +23,13 @@ export async function seed(knex: Knex): Promise<void> {
       symbol: 'AAPL',
       name: 'Apple Inc.',
       type: 'stock',
-      source: 'iex',
-      metadata: {
-        sector: 'Technology',
-        industry: 'Consumer Electronics',
-      },
+      exchange: 'nasdaq',
     },
     {
       symbol: 'TSLA',
       name: 'Tesla, Inc.',
       type: 'stock',
-      source: 'iex',
-      metadata: {
-        sector: 'Automotive',
-        industry: 'Electric Vehicles',
-      },
+      exchange: 'nasdaq',
     },
   ];
 

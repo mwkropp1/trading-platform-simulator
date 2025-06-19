@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { LoginSchema, RegisterSchema } from '../schemas/authSchemas';
+import { loginSchema, registerSchema } from '../schemas/auth.schema';
 import { AuthService } from '../services/authService';
-import { UserResponseSchema } from '../schemas/userSchemas';
+import { userResponseSchema } from '../schemas/user.schema';
 import type { AuthRequest } from '../middlewares/authMiddleware';
 import { z } from 'zod';
 import { AuthError } from '../errors';
@@ -9,9 +9,9 @@ import { AuthError } from '../errors';
 export class AuthController {
   static register = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { username, email, password, role } = RegisterSchema.parse(req.body);
+      const { username, email, password, role } = registerSchema.parse(req.body);
       const { user, token } = await AuthService.registerUser(username, email, password, role);
-      const safeUser = UserResponseSchema.parse(user);
+      const safeUser = userResponseSchema.parse(user);
       res.status(201).json({ user: safeUser, token });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -37,9 +37,9 @@ export class AuthController {
 
   static login = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { email, password } = LoginSchema.parse(req.body);
+      const { email, password } = loginSchema.parse(req.body);
       const { user, token } = await AuthService.loginUser(email, password);
-      const safeUser = UserResponseSchema.parse(user);
+      const safeUser = userResponseSchema.parse(user);
       res.json({ user: safeUser, token });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -70,7 +70,7 @@ export class AuthController {
       }
 
       const user = await AuthService.getCurrentUser(req.user.id);
-      const safeUser = UserResponseSchema.parse(user);
+      const safeUser = userResponseSchema.parse(user);
       res.json(safeUser);
     } catch (error) {
       if (error instanceof AuthError) {

@@ -30,7 +30,6 @@ export class ValidationError extends ApiError {
     return new ValidationError('Validation failed', 400, 'VALIDATION_ERROR', validationDetails);
   }
 
-  // Helper method to access validation details
   getDetails(): ValidationDetails[] {
     return this.validationDetails;
   }
