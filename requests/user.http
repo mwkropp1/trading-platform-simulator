@@ -1,5 +1,7 @@
+@baseUrl = http://localhost:3000/api/v1
+
 ### Create new user
-POST http://localhost:3000/api/v1/users
+POST {{baseUrl}}/users
 Content-Type: application/json
 
 {
@@ -11,9 +13,5 @@ Content-Type: application/json
 }
 
 ### Get user by ID
-GET http://localhost:3000/api/v1/users/68547ebd-baaf-4054-b04e-fee9507b11bd
-Content-Type: application/json
-
-### Check Health
-GET http://localhost:3000/health
+GET {{baseUrl}}/users/68547ebd-baaf-4054-b04e-fee9507b11bd
 Content-Type: application/json

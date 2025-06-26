@@ -23,7 +23,8 @@
     "seed:run": "tsx ./node_modules/.bin/knex seed:run --knexfile knexfile.ts",
     "build": "tsc",
     "prepare": "npm run typecheck && npm run lint && npm run format:check",
-    "validate": "npm run test && npm run prepare"
+    "validate": "npm run test && npm run prepare",
+    "db:reset": "npm run migrate:rollback && npm run migrate && npm run seed:run"
   },
   "keywords": [
     "node",

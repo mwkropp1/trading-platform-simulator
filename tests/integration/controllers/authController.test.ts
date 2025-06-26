@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { AuthController } from '../../../src/controllers/authController';
 import { AuthService } from '../../../src/services/authService';
-import { RegisterSchema } from '../../../src/schemas/authSchemas';
-import { UserResponseSchema } from '../../../src/schemas/userSchemas';
+import { RegisterSchema } from '../../../src/schemas/auth.schema';
+import { UserResponseSchema } from '../../../src/schemas/user.schema';
 import { z } from 'zod';
 
 jest.mock('../../../src/services/authService');

@@ -1,5 +1,5 @@
 import { TradeService } from '../../../src/services/tradeService';
-import { PriceService } from '../../../src/utils/priceService';
+import { PriceService } from '../../../src/services/priceService';
 import { getAssetBySymbol } from '../../../src/repositories/assetRepository';
 import { getHoldingByUserAndAsset } from '../../../src/repositories/holdingRepository';
 import { ValidationError } from '../../../src/errors';

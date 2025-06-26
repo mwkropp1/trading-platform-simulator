@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:3000/api/v1
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYxN2RlYmNlLWQyNDUtNGRkYi05M2EyLWIzZmMzY2VkN2I0NSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MDkwMTg0NCwiZXhwIjoxNzUwOTg4MjQ0fQ.4Ltv749i7xmkT4XTiupOgluqa4F4OjbmBoPueLMTxUM
+### Create a buy trade for Bitcoin
+POST {{baseUrl}}/trades
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "symbol": "BTC",
+  "type": "crypto",
+  "quantity": 3,
+  "trade_type": "buy"
+}
+
+### Create a sell trade for Bitcoin
+POST {{baseUrl}}/trades
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "symbol": "BTC",
+  "type": "crypto",
+  "quantity": 0.5,
+  "trade_type": "sell"
+}
+
+### Create a buy trade for Apple stock
+POST {{baseUrl}}/trades
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "type": "stock",
+  "quantity": 10,
+  "trade_type": "buy"
+}
+
+### Get all my trades
+GET {{baseUrl}}/trades
+Authorization: Bearer {{authToken}}
+
+### Get trades for specific asset
+GET {{baseUrl}}/trades?symbol=AAPL&type=stock
+Authorization: Bearer {{authToken}}
